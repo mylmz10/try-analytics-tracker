@@ -3,7 +3,7 @@ const cors = require("cors");
 
 let http;
 let app;
-const PORT = 8085;
+const PORT = process.env.PORT || 8085;
 
 function main() {
   app = express();
