@@ -1,28 +1,38 @@
 const express = require("express");
 const cors = require("cors");
+const api = require("./api/Api");
 
-let http;
-let app;
-const PORT = process.env.PORT || 8085;
+class TryAnalytics {
+  constructor() {
+    this.http = null;
+    this.app = null;
+    this.port = process.env.PORT || 8085;
 
-function main() {
-  app = express();
-  http = require("http").Server(app);
-  app.use(cors());
-  app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-  });
+    this.configServer();
+    this.registerEndpoints();
+  }
 
-  http.listen(PORT, function () {
-    console.log("Server is listening on *:" + PORT); // eslint-disable-line
-  });
-  registerEndpoints();
+  configServer() {
+    this.app = express();
+    this.http = require("http").Server(this.app);
+    this.app.use(cors());
+    this.app.use(function (req, res, next) {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      next();
+    });
+
+    this.http.listen(this.port, () => {
+      console.log("Server is listening on *:" + this.port); // eslint-disable-line
+    });
+  }
+
+  registerEndpoints() {
+    this.app.use("/", express.static("./dist"));
+
+    this.app.post(`${api.apiPath}/saveResult`, api.saveResult.bind(api));
+    this.app.get(`${api.apiPath}/getResult`, api.getResult.bind(api));
+  }
 }
 
-function registerEndpoints() {
-  app.use("/", express.static("./dist"));
-}
-
-main();
+const tryAnalytics = new TryAnalytics();

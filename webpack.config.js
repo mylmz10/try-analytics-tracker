@@ -1,7 +1,7 @@
 const path = require("path");
 
 module.exports = (env, arg) => ({
-  entry: "./src/try-analytics.js",
+  entry: "./src/client-tracker/tryAnalytics.js",
   output: {
     filename: "try-analytics.min.js",
     path: path.resolve(__dirname, "dist"),
