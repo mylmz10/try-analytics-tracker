@@ -1,4 +1,5 @@
 const path = require("path");
+const Dotenv = require("dotenv-webpack");
 
 module.exports = (env, arg) => ({
   entry: "./src/client-tracker/tryAnalytics.js",
@@ -12,6 +13,11 @@ module.exports = (env, arg) => ({
   optimization: {
     minimize: true,
   },
+  plugins: [
+    new Dotenv({
+      path: "./.env",
+    }),
+  ],
   module: {
     rules: [
       {

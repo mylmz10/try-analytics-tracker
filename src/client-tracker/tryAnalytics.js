@@ -1,7 +1,47 @@
+import { request } from "../utils/fetch";
+
 class TryAnalytics {
+  constructor() {
+    this.token = null;
+  }
+
+  set setToken(token) {
+    this.token = token;
+  }
+
+  register(token) {
+    this.setToken = token;
+  }
+
   performAnalytics() {
     window.addEventListener("load", () => {
-      console.log("getMetrics:", this.getTimingAndMetrics());
+      const result = this.getTimingAndMetrics();
+      const body = {
+        token: this.token,
+        url: window.location.hostname,
+        data: result,
+      };
+
+      const lastRequestDate = localStorage.getItem("lastRequestDate");
+      const now = new Date();
+      let allowRequest = false;
+      if (lastRequestDate) {
+        try {
+          // Restrict multiple post request. One request can be sent per minute
+          const diff = now.getTime() - lastRequestDate > 60000;
+          if (diff || isNaN(diff)) {
+            allowRequest = true;
+          }
+        } catch (e) {
+          allowRequest = true;
+        }
+      } else {
+        allowRequest = true;
+      }
+      if (allowRequest) {
+        request({ url: `${process.env.API_URL}/api/saveResult`, body });
+        localStorage.setItem("lastRequestDate", now.getTime());
+      }
     });
   }
 
@@ -40,5 +80,12 @@ class TryAnalytics {
   }
 }
 
-const tryAnalytics = new TryAnalytics();
-tryAnalytics.performAnalytics();
+window.tryAnalytics = function (token) {
+  const tryAnalytics = new TryAnalytics();
+  tryAnalytics.register(token);
+  if (token) {
+    tryAnalytics.performAnalytics();
+  } else {
+    console.warn("TryAnalytics Token does not found. Registration does not successful!"); // eslint-disable-line
+  }
+};
