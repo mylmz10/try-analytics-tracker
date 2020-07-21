@@ -24,7 +24,7 @@ npm run start
 
 ## Using
 
-```
+```html
 <script src="https://try-analytics-tracker.herokuapp.com/try-analytics.min.js"></script>
 
 <!-- Initialize -->
