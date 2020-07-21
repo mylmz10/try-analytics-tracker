@@ -1,12 +1,14 @@
 const express = require("express");
 const cors = require("cors");
+const bodyParser = require("body-parser");
+require("dotenv").config();
 const api = require("./api/Api");
 
 class TryAnalytics {
   constructor() {
     this.http = null;
     this.app = null;
-    this.port = process.env.PORT || 8085;
+    this.port = process.env.PORT || 8086;
 
     this.configServer();
     this.registerEndpoints();
@@ -21,6 +23,9 @@ class TryAnalytics {
       res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
       next();
     });
+
+    this.app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+    this.app.use(bodyParser.json({ limit: "50mb" }));
 
     this.http.listen(this.port, () => {
       console.log("Server is listening on *:" + this.port); // eslint-disable-line
