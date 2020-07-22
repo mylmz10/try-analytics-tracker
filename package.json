@@ -1,6 +1,6 @@
 {
   "name": "try-analytics-tracker",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "src/main.js",
   "scripts": {
@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.10.5",
+    "@babel/plugin-transform-runtime": "^7.10.5",
     "@babel/preset-env": "^7.10.4",
     "babel-loader": "^8.1.0",
     "dotenv-webpack": "^2.0.0",
