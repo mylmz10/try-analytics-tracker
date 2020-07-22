@@ -38,6 +38,9 @@ class TryAnalytics {
       } else {
         allowRequest = true;
       }
+
+      // TODO restriction mechanism must be activated in future.
+      allowRequest = true;
       if (allowRequest) {
         request({ url: `${process.env.API_URL}/api/saveResult`, body });
         localStorage.setItem("lastRequestDate", now.getTime());
